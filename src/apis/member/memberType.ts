@@ -16,7 +16,7 @@ export interface CurrentRecruitmentType {
   };
   feeName: string;
   fee: number;
-  roundType: 'FIRST' | 'SECOND';
+  roundType: 'FIRST' | 'SECOND' | 'THIRD';
   roundTypeValue: string;
 }
 
