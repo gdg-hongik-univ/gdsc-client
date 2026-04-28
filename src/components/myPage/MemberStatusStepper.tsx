@@ -55,7 +55,7 @@ const StepperContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 335px;
+  width: 100%;
   gap: 12px;
 `;
 
