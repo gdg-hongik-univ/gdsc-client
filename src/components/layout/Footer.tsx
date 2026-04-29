@@ -3,13 +3,16 @@ import { Logo } from '@/assets/LogoIcon';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { media } from '@styles/theme';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { color } from 'wowds-tokens';
 import { Flex, Text } from '../common/Wrapper';
 
 const Footer = () => {
+  const { pathname } = useLocation();
+  const isMobileWidth = pathname == '/';
+
   return (
-    <Container>
+    <Container $variant={isMobileWidth ? 'default' : 'full'}>
       <Flex
         direction="column"
         align="start"
@@ -135,7 +138,7 @@ const Footer = () => {
   );
 };
 
-const Container = styled.footer`
+const Container = styled.footer<{ $variant?: 'default' | 'full' }>`
   width: 100%;
   padding: 1.5rem 1rem;
 
@@ -146,6 +149,12 @@ const Container = styled.footer`
   }
   ${media.mobile} {
     max-width: 475px;
+
+    ${({ $variant }) =>
+      $variant === 'full' &&
+      css`
+        max-width: none;
+      `}
   }
 `;
 
