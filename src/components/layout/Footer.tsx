@@ -22,9 +22,11 @@ const Footer = () => {
           ${media.pc} {
             flex-direction: row;
             justify-content: space-between;
-            width: 993px;
+            width: 100%;
+            max-width: 993px;
             margin: 0 auto;
             padding: 0 1.5rem;
+            box-sizing: border-box;
           }
         `}>
         <Flex
