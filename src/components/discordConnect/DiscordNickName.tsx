@@ -20,7 +20,7 @@ const validateDiscordNickname = (value: string): string | null => {
 };
 
 export const DiscordNickName = ({ onNext }: { onNext: () => void }) => {
-  const { getValues, control, setError, clearErrors, setValue } =
+  const { getValues, control, setError, clearErrors } =
     useFormContext<DiscordFormValues>();
   const { checkDuplicate, data, isSuccess, isPending } =
     usePostDiscordNickname();
@@ -41,10 +41,6 @@ export const DiscordNickName = ({ onNext }: { onNext: () => void }) => {
 
   const submitWithValue = useCallback(
     (value: string) => {
-      setValue('discordNickname', value, {
-        shouldValidate: false,
-        shouldDirty: true
-      });
       const error = validateDiscordNickname(value);
       if (error) {
         setError('discordNickname', { type: 'manual', message: error });
@@ -52,7 +48,7 @@ export const DiscordNickName = ({ onNext }: { onNext: () => void }) => {
       }
       checkDuplicate(value);
     },
-    [checkDuplicate, setError, setValue]
+    [checkDuplicate, setError]
   );
 
   const handleNextClick = useCallback(() => {
@@ -121,13 +117,10 @@ const NameField = ({
   onSubmitValue: (value: string) => void;
   disabled: boolean;
 }) => {
-  const { setError, clearErrors } = useFormContext<DiscordFormValues>();
+  const { clearErrors } = useFormContext<DiscordFormValues>();
   const { field, fieldState } = useController({
     name: 'discordNickname',
-    control,
-    rules: {
-      validate: (value) => validateDiscordNickname(value) ?? true
-    }
+    control
   });
 
   return (
@@ -135,12 +128,7 @@ const NameField = ({
       {...field}
       onChange={(value: string) => {
         field.onChange(value);
-        const error = validateDiscordNickname(value);
-        if (error) {
-          setError('discordNickname', { type: 'manual', message: error });
-        } else {
-          clearErrors('discordNickname');
-        }
+        if (fieldState.error) clearErrors('discordNickname');
       }}
       textareaProps={{
         disabled,

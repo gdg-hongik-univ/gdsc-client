@@ -28,8 +28,7 @@ const validateDiscordUsername = (value: string): string | null => {
 };
 
 export const DiscordName = ({ onNext }: { onNext: () => void }) => {
-  const { getValues, control, setError, setValue } =
-    useFormContext<DiscordFormValues>();
+  const { getValues, control, setError } = useFormContext<DiscordFormValues>();
 
   const { checkDuplicate, data, isSuccess, isPending } = usePostDiscordName();
 
@@ -49,10 +48,6 @@ export const DiscordName = ({ onNext }: { onNext: () => void }) => {
 
   const submitWithValue = useCallback(
     (value: string) => {
-      setValue('discordUsername', value, {
-        shouldValidate: false,
-        shouldDirty: true
-      });
       const error = validateDiscordUsername(value);
       if (error) {
         setError('discordUsername', { type: 'manual', message: error });
@@ -60,7 +55,7 @@ export const DiscordName = ({ onNext }: { onNext: () => void }) => {
       }
       checkDuplicate(value);
     },
-    [checkDuplicate, setError, setValue]
+    [checkDuplicate, setError]
   );
 
   const handleNextClick = useCallback(() => {
@@ -137,13 +132,10 @@ const NameField = ({
   onSubmitValue: (value: string) => void;
   disabled: boolean;
 }) => {
-  const { setError, clearErrors } = useFormContext<DiscordFormValues>();
+  const { clearErrors } = useFormContext<DiscordFormValues>();
   const { field, fieldState } = useController({
     name: 'discordUsername',
-    control,
-    rules: {
-      validate: (value) => validateDiscordUsername(value) ?? true
-    }
+    control
   });
 
   return (
@@ -151,12 +143,7 @@ const NameField = ({
       {...field}
       onChange={(value: string) => {
         field.onChange(value);
-        const error = validateDiscordUsername(value);
-        if (error) {
-          setError('discordUsername', { type: 'manual', message: error });
-        } else {
-          clearErrors('discordUsername');
-        }
+        if (fieldState.error) clearErrors('discordUsername');
       }}
       textareaProps={{
         disabled,
