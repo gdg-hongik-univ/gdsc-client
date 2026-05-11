@@ -9,10 +9,10 @@ import { Flex, Text } from '../common/Wrapper';
 
 const Footer = () => {
   const { pathname } = useLocation();
-  const isMobileWidth = pathname == '/';
+  const isLandingPage = pathname == '/';
 
   return (
-    <Container $variant={isMobileWidth ? 'default' : 'full'}>
+    <Container $variant={isLandingPage ? 'landing' : 'full'}>
       <Flex
         direction="column"
         align="start"
@@ -140,7 +140,7 @@ const Footer = () => {
   );
 };
 
-const Container = styled.footer<{ $variant?: 'default' | 'full' }>`
+const Container = styled.footer<{ $variant?: 'landing' | 'full' }>`
   width: 100%;
   padding: 1.5rem 1rem;
 
@@ -150,12 +150,12 @@ const Container = styled.footer<{ $variant?: 'default' | 'full' }>`
     padding: 5.25rem 0;
   }
   ${media.mobile} {
-    max-width: 475px;
+    max-width: none;
 
     ${({ $variant }) =>
-      $variant === 'full' &&
+      $variant === 'landing' &&
       css`
-        max-width: none;
+        max-width: 475px;
       `}
   }
 `;
