@@ -3,13 +3,16 @@ import { Logo } from '@/assets/LogoIcon';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { media } from '@styles/theme';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { color } from 'wowds-tokens';
 import { Flex, Text } from '../common/Wrapper';
 
 const Footer = () => {
+  const { pathname } = useLocation();
+  const isLandingPage = pathname == '/';
+
   return (
-    <Container>
+    <Container $variant={isLandingPage ? 'landing' : 'full'}>
       <Flex
         direction="column"
         align="start"
@@ -19,14 +22,18 @@ const Footer = () => {
           ${media.pc} {
             flex-direction: row;
             justify-content: space-between;
-            width: 993px;
+            width: 100%;
+            max-width: 993px;
             margin: 0 auto;
+            padding: 0 1.5rem;
+            box-sizing: border-box;
           }
         `}>
         <Flex
           direction="column"
           align="start"
           justify="flex-start"
+          style={{ width: 'fit-content' }}
           css={css`
             gap: 1.5rem;
             ${media.pc} {
@@ -70,6 +77,7 @@ const Footer = () => {
           direction="column"
           align="start"
           justify="flex-start"
+          style={{ width: 'fit-content' }}
           css={css`
             gap: 1.5rem;
             ${media.pc} {
@@ -80,7 +88,7 @@ const Footer = () => {
             gap="md"
             align="start"
             justify="start"
-            style={{ width: '100%' }}>
+            style={{ width: 'fit-content' }}>
             <button
               onClick={() => {
                 window.location.href = 'https://github.com/gdg-hongik-univ';
@@ -132,7 +140,7 @@ const Footer = () => {
   );
 };
 
-const Container = styled.footer`
+const Container = styled.footer<{ $variant?: 'landing' | 'full' }>`
   width: 100%;
   padding: 1.5rem 1rem;
 
@@ -140,6 +148,15 @@ const Container = styled.footer`
 
   ${media.pc} {
     padding: 5.25rem 0;
+  }
+  ${media.mobile} {
+    max-width: none;
+
+    ${({ $variant }) =>
+      $variant === 'landing' &&
+      css`
+        max-width: 475px;
+      `}
   }
 `;
 
