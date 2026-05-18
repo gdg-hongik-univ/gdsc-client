@@ -1,6 +1,5 @@
 import { Flex, Space, Text } from '@/components/common/Wrapper';
 import * as Sentry from '@sentry/react';
-import GlobalSize from '@/constants/globalSize';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +26,7 @@ const NotFoundPage = () => {
       </Flex>
       <ButtonContainer>
         <Button
-          style={{ maxWidth: '100%' }}
+          style={{ maxWidth: '328px', width: '100%' }}
           onClick={() => {
             navigate('/');
           }}>
@@ -51,7 +50,7 @@ const NotfoundWrapper = styled.div`
   justify-content: start;
   align-items: center;
   min-height: calc(100vh - var(--header-height, 0px));
-  width: ${GlobalSize.width};
+  width: 100%;
   margin: 0px -16px;
   padding: 0px 16px;
   padding-top: 40px;
