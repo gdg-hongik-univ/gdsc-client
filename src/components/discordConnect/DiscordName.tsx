@@ -13,11 +13,24 @@ import TextField from 'wowds-ui/TextField';
 import { Image } from '../common/Image';
 import DiscordImage from '/discord/discord-name.png';
 
-export const DiscordName = ({ onNext }: { onNext: () => void }) => {
-  const { getValues, control, trigger, setError } =
-    useFormContext<DiscordFormValues>();
+const validateDiscordUsername = (value: string): string | null => {
+  if (!value) return '사용자명을 입력해주세요.';
+  if (value.length < 2 || value.length > 32)
+    return '최소 2자, 최대 32자까지만 작성 가능해요.';
+  if (/[A-Z]/.test(value)) return '대문자가 아닌 소문자로만 작성 가능해요.';
+  if (!/^[a-z0-9_.]+$/.test(value))
+    return '영문 소문자, 숫자, 밑줄(_), 마침표(.)만 사용 가능해요.';
+  if (/(__|\.\.)/.test(value))
+    return '연속적인 밑줄(__)이나 마침표(..)는 사용할 수 없어요.';
+  if (/discord|nitro|nelly/.test(value))
+    return 'discord, nitro, nelly와 같은 디스코드 공식 이름은 사용할 수 없어요.';
+  return null;
+};
 
-  const { checkDuplicate, data, isSuccess } = usePostDiscordName();
+export const DiscordName = ({ onNext }: { onNext: () => void }) => {
+  const { getValues, control, setError } = useFormContext<DiscordFormValues>();
+
+  const { checkDuplicate, data, isSuccess, isPending } = usePostDiscordName();
 
   useEffect(() => {
     if (isSuccess) {
@@ -33,17 +46,21 @@ export const DiscordName = ({ onNext }: { onNext: () => void }) => {
     }
   }, [data?.isDuplicate, isSuccess, onNext, setError]);
 
-  const handleNextClick = useCallback(async () => {
-    const isValid = await trigger('discordUsername');
-    if (isValid) {
-      checkDuplicate(getValues('discordUsername'));
-    } else {
-      setError('discordUsername', {
-        type: 'manual',
-        message: '하단 규정에 맞춰 작성해주세요.'
-      });
-    }
-  }, [checkDuplicate, getValues, setError, trigger]);
+  const submitWithValue = useCallback(
+    (value: string) => {
+      const error = validateDiscordUsername(value);
+      if (error) {
+        setError('discordUsername', { type: 'manual', message: error });
+        return;
+      }
+      checkDuplicate(value);
+    },
+    [checkDuplicate, setError]
+  );
+
+  const handleNextClick = useCallback(() => {
+    submitWithValue(getValues('discordUsername'));
+  }, [getValues, submitWithValue]);
 
   return (
     <Wrapper direction="column">
@@ -54,7 +71,11 @@ export const DiscordName = ({ onNext }: { onNext: () => void }) => {
         <Space height="lg" />
       </MobileOnly>
       <div style={{ width: '100%' }}>
-        <NameField control={control} />
+        <NameField
+          control={control}
+          onSubmitValue={submitWithValue}
+          disabled={isPending}
+        />
       </div>
 
       <Flex direction="column" style={{ marginTop: 'auto' }}>
@@ -102,28 +123,38 @@ const TextSection = memo(() => {
   );
 });
 
-const NameField = ({ control }: { control: Control<DiscordFormValues> }) => {
+const NameField = ({
+  control,
+  onSubmitValue,
+  disabled
+}: {
+  control: Control<DiscordFormValues>;
+  onSubmitValue: (value: string) => void;
+  disabled: boolean;
+}) => {
+  const { clearErrors } = useFormContext<DiscordFormValues>();
   const { field, fieldState } = useController({
     name: 'discordUsername',
-    control,
-    rules: {
-      required: '사용자명을 입력해주세요.',
-      pattern: {
-        value: /^[a-z0-9_.]{2,32}$/,
-        message: '하단 규정에 맞춰 작성해주세요.'
-      },
-      validate: {
-        noSequentialSpecialChar: (value) =>
-          !/(__|\.\.)/.test(value) || '하단 규정에 맞춰 작성해주세요.',
-        noOfficialNames: (value) =>
-          !/discord|nitro|nelly/.test(value) || '하단 규정에 맞춰 작성해주세요.'
-      }
-    }
+    control
   });
 
   return (
     <TextField
       {...field}
+      onChange={(value: string) => {
+        field.onChange(value);
+        if (fieldState.error) clearErrors('discordUsername');
+      }}
+      textareaProps={{
+        disabled,
+        onKeyDown: (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (disabled) return;
+            onSubmitValue(e.currentTarget.value);
+          }
+        }
+      }}
       helperText={
         <ul style={{ listStyle: 'disc', paddingLeft: '20px' }}>
           {fieldState.error?.message && (

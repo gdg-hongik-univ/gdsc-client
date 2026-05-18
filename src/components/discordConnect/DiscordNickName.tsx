@@ -11,10 +11,19 @@ import TextField from 'wowds-ui/TextField';
 import { Image } from '../common/Image';
 import DiscordImage from '/discord/discord-nickname.png';
 
+const validateDiscordNickname = (value: string): string | null => {
+  if (!value) return '별명을 입력해주세요.';
+  if (value.length < 2 || value.length > 6)
+    return '최소 2자, 최대 6자까지만 작성 가능해요.';
+  if (!/^[가-힣]+$/.test(value)) return '한글만 작성 가능해요.';
+  return null;
+};
+
 export const DiscordNickName = ({ onNext }: { onNext: () => void }) => {
-  const { getValues, control, setError, clearErrors, trigger } =
+  const { getValues, control, setError, clearErrors } =
     useFormContext<DiscordFormValues>();
-  const { checkDuplicate, data, isSuccess } = usePostDiscordNickname();
+  const { checkDuplicate, data, isSuccess, isPending } =
+    usePostDiscordNickname();
 
   useEffect(() => {
     if (isSuccess) {
@@ -30,17 +39,21 @@ export const DiscordNickName = ({ onNext }: { onNext: () => void }) => {
     }
   }, [data?.isDuplicate, isSuccess, onNext, setError, clearErrors]);
 
-  const handleNextClick = useCallback(async () => {
-    const isValid = await trigger('discordNickname');
-    if (isValid) {
-      checkDuplicate(getValues('discordNickname'));
-    } else {
-      setError('discordNickname', {
-        type: 'manual',
-        message: '하단 규정에 맞춰 작성해주세요.'
-      });
-    }
-  }, [checkDuplicate, getValues, setError, trigger]);
+  const submitWithValue = useCallback(
+    (value: string) => {
+      const error = validateDiscordNickname(value);
+      if (error) {
+        setError('discordNickname', { type: 'manual', message: error });
+        return;
+      }
+      checkDuplicate(value);
+    },
+    [checkDuplicate, setError]
+  );
+
+  const handleNextClick = useCallback(() => {
+    submitWithValue(getValues('discordNickname'));
+  }, [getValues, submitWithValue]);
 
   return (
     <Wrapper direction="column">
@@ -51,7 +64,11 @@ export const DiscordNickName = ({ onNext }: { onNext: () => void }) => {
         <Space height="lg" />
       </MobileOnly>
       <div style={{ width: '100%' }}>
-        <NameField control={control} />
+        <NameField
+          control={control}
+          onSubmitValue={submitWithValue}
+          disabled={isPending}
+        />
       </div>
 
       <Flex direction="column" style={{ marginTop: 'auto' }}>
@@ -91,22 +108,38 @@ const TextSection = memo(() => (
   </>
 ));
 
-const NameField = ({ control }: { control: Control<DiscordFormValues> }) => {
+const NameField = ({
+  control,
+  onSubmitValue,
+  disabled
+}: {
+  control: Control<DiscordFormValues>;
+  onSubmitValue: (value: string) => void;
+  disabled: boolean;
+}) => {
+  const { clearErrors } = useFormContext<DiscordFormValues>();
   const { field, fieldState } = useController({
     name: 'discordNickname',
-    control,
-    rules: {
-      required: '별명을 입력해주세요.',
-      pattern: {
-        value: /^[가-힣]{2,6}$/,
-        message: '하단 규정에 맞춰 작성해주세요.'
-      }
-    }
+    control
   });
 
   return (
     <TextField
       {...field}
+      onChange={(value: string) => {
+        field.onChange(value);
+        if (fieldState.error) clearErrors('discordNickname');
+      }}
+      textareaProps={{
+        disabled,
+        onKeyDown: (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (disabled) return;
+            onSubmitValue(e.currentTarget.value);
+          }
+        }
+      }}
       helperText={
         <ul style={{ listStyle: 'disc', paddingLeft: '20px' }}>
           {fieldState.error?.message && (
