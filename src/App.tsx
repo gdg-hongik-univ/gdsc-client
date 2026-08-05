@@ -21,8 +21,12 @@ import RoutePath from './routes/routePath';
 import ReactGA from 'react-ga4';
 import { useEffect } from 'react';
 
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_ID || 'G-XXXXXXXXXX';
-ReactGA.initialize(GA_MEASUREMENT_ID);
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_ID;
+if (GA_MEASUREMENT_ID) {
+  ReactGA.initialize(GA_MEASUREMENT_ID, {
+    gtagOptions: { send_page_view: false }
+  });
+}
 
 function App() {
   const navigate = useNavigate();
@@ -33,7 +37,7 @@ function App() {
       hitType: 'pageview',
       page: location.pathname + location.search
     });
-  }, [location]);
+  }, [location.pathname, location.search]);
 
   return (
     <Wrapper direction="column" justify="flex-start" align="center">
