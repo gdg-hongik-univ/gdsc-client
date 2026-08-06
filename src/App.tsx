@@ -11,33 +11,16 @@ import { media } from '@/styles';
 import { isAuthenticated } from '@/utils/auth';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { color, typography } from 'wowds-tokens';
 import Button from 'wowds-ui/Button';
 
 import Carousel from './components/onboarding/Carousel';
 import RoutePath from './routes/routePath';
-import ReactGA from 'react-ga4';
-import { useEffect } from 'react';
-
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_ID;
-if (GA_MEASUREMENT_ID) {
-  ReactGA.initialize(GA_MEASUREMENT_ID, {
-    gtagOptions: { send_page_view: false }
-  });
-}
 
 function App() {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    ReactGA.send({
-      hitType: 'pageview',
-      page: location.pathname + location.search
-    });
-  }, [location.pathname, location.search]);
 
   return (
     <Wrapper direction="column" justify="flex-start" align="center">

@@ -5,7 +5,8 @@ import GlobalSize from '@/constants/globalSize';
 import RoutePath from '@/routes/routePath';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
-import { useLayoutEffect, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo } from 'react';
+import ReactGA from 'react-ga4';
 import { Outlet, useLocation } from 'react-router-dom';
 import { color } from 'wowds-tokens';
 import { Flex } from '../common/Wrapper';
@@ -18,12 +19,26 @@ const PATHS_WITH_HEADER_FOOTER: Set<string> = new Set([
   RoutePath.Discord
 ]);
 
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_ID;
+if (GA_MEASUREMENT_ID) {
+  ReactGA.initialize(GA_MEASUREMENT_ID, {
+    gtagOptions: { send_page_view: false }
+  });
+}
+
 const Layout = () => {
   const location = useLocation();
 
   const showHeaderFooter = useMemo(() => {
     return PATHS_WITH_HEADER_FOOTER.has(location.pathname);
   }, [location.pathname]);
+
+  useEffect(() => {
+    ReactGA.send({
+      hitType: 'pageview',
+      page: location.pathname + location.search
+    });
+  }, [location.pathname, location.search]);
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
