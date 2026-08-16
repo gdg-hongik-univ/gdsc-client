@@ -108,7 +108,7 @@ const Footer = () => {
               와우디벨로퍼스 | 서울특별시 동작구 상도로53길 8, 325동 606호
             </Text>
             <Text typo="body3" color="sub">
-              대표 이혁 | TEL 010-2628-3439 | 사업자등록번호 311-82-77953
+              대표 박유빈 | TEL 010-5938-0188 | 사업자등록번호 311-82-77953
             </Text>
             <Flex justify="flex-start" gap="xxs">
               <Link
