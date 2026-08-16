@@ -21,8 +21,8 @@ const RoutePath = {
   AuthServerRedirect: '/social-login/redirect',
   StudentVerificationServerRedirect: '/onboarding/verify-univ-email',
   EmailVerificationServerRedirect: '/onboarding/verify-email',
-  GDSCHongikLink: 'https://www.gdghongik.com',
-  GDSCHongikDiscord: 'https://discord.gg/dSV6vSEuGU',
+  GDGHongikLink: 'https://www.gdghongik.com',
+  GDGHongikDiscord: 'https://discord.gg/dSV6vSEuGU',
   GitHubGuideLink: 'https://www.gdghongik.com/onboard-guide/github',
   StudentEmailLinkGuideLink:
     'https://www.gdghongik.com/onboard-guide/student-email',
@@ -31,7 +31,7 @@ const RoutePath = {
   TermsLink: 'https://www.gdghongik.com/onboard-guide/community-rule',
   PersonalPrivacyLink: 'https://www.gdghongik.com/onboard-guide/privacy-policy',
 
-  InstagramLink: 'https://www.instagram.com/gdsc.hongik/',
+  InstagramLink: 'https://www.instagram.com/gdg.hongikuniv/',
   DiscordRegisterLink: 'https://discord.com/register',
   DiscordCodeLink:
     'https://discord.com/channels/1001436927699980359/1082704130361004063',

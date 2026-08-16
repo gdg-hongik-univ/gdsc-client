@@ -96,7 +96,7 @@ export const JoinServer = ({ onNext }: { onNext: () => void }) => {
                 text="GDG Hongik Univ. 공식 디스코드 서버↗︎"
                 style={{ color: color.discord }}
                 onClick={() =>
-                  window.open(RoutePath.GDSCHongikDiscord, '_blank')
+                  window.open(RoutePath.GDGHongikDiscord, '_blank')
                 }
               />
             </Flex>
@@ -109,7 +109,7 @@ export const JoinServer = ({ onNext }: { onNext: () => void }) => {
           <TextButton
             text="GDG Hongik Univ. 공식 디스코드 서버↗︎"
             style={{ color: color.discord, margin: 'auto' }}
-            onClick={() => window.open(RoutePath.GDSCHongikDiscord, '_blank')}
+            onClick={() => window.open(RoutePath.GDGHongikDiscord, '_blank')}
           />
         </MobileOnly>
 

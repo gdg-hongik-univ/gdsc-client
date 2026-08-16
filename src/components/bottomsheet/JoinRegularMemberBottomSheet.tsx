@@ -42,19 +42,25 @@ const JoinRegularMemberBottomSheet = ({
           text={
             <Flex gap="xl" direction="column" style={{ width: 'auto' }}>
               <Flex direction="column" gap="xxs">
-                <Text typo="label1">각종 학술 프로그램 및 온/오프라인 이벤트</Text>
+                <Text typo="label1">
+                  각종 학술 프로그램 및 온/오프라인 이벤트
+                </Text>
                 <Text typo="body2" color="sub">
                   다양한 학우들과 교류할 수 있는 기회예요.
                 </Text>
               </Flex>
               <Flex direction="column" gap="xxs">
-                <Text typo="label1">학회원들과 소통할 수 있는 디스코드 채널</Text>
+                <Text typo="label1">
+                  학회원들과 소통할 수 있는 디스코드 채널
+                </Text>
                 <Text typo="body2" color="sub">
                   유익한 정보를 얻고, 다양한 소모임에 참가해보세요.
                 </Text>
               </Flex>
               <Flex direction="column" gap="xxs">
-                <Text typo="label1">해커톤, 컨퍼런스 등 Google 관련 이벤트 참여</Text>
+                <Text typo="label1">
+                  해커톤, 컨퍼런스 등 Google 관련 이벤트 참여
+                </Text>
                 <Text typo="body2" color="sub">
                   빠르게 소식을 전달받고, 먼저 기회를 얻을 수 있어요.
                 </Text>
@@ -68,7 +74,7 @@ const JoinRegularMemberBottomSheet = ({
           회비는 2만원이고, 쿠폰이 있을 경우 할인받을 수 있어요.
           <br />
           자세한 내용은{' '}
-          <TextLink to={RoutePath.GDSCHongikLink} target="_blank">
+          <TextLink to={RoutePath.GDGHongikLink} target="_blank">
             GDG Hongik Univ. 페이지
           </TextLink>
           를 참고해주세요.
