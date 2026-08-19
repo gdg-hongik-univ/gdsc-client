@@ -4,11 +4,21 @@ import { useMutation } from '@tanstack/react-query';
 export default function useVerifyStudentEmail() {
   const {
     mutate: verifyStudentMail,
+    mutateAsync: verifyStudentMailAsync,
     isSuccess,
-    isPending
+    isPending,
+    error,
+    ...rest
   } = useMutation({
-    mutationFn: verifyStudentApi.VERIFY_STUDENT_EMAIL
+    mutationFn: (code: string) => verifyStudentApi.VERIFY_STUDENT_EMAIL(code)
   });
 
-  return { verifyStudentMail, isSuccess, isPending };
+  return {
+    verifyStudentMail,
+    verifyStudentMailAsync,
+    isSuccess,
+    isPending,
+    error,
+    ...rest
+  };
 }

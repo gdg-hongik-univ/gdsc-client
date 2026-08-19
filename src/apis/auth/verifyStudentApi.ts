@@ -8,6 +8,7 @@ const verifyStudentApi = {
     );
     return response.data;
   },
+  // 2-3. 재학생 인증 메일 발송
   SEND_STUDENT_EMAIL: async (univEmail: string) => {
     const response = await apiClient.post(
       `/onboarding/send-verify-univ-email`,
@@ -17,24 +18,28 @@ const verifyStudentApi = {
     );
     return response.data;
   },
-  VERIFY_STUDENT_EMAIL: async (token: string) => {
+  // 2-4 재학생 인증
+  // code string, code 규칙 필수 = 6자리 숫자
+  VERIFY_STUDENT_EMAIL: async (code: string) => {
     const response = await apiClient.patch(`/onboarding/verify-univ-email`, {
-      token: token
+      code: code.trim()
     });
     return response.data;
   },
-  SEND_VERIFY_EMAIL: async (previousMemberId: number): Promise<{ previousMemberId: number }> => {
-    const response = await apiClient.post(
-      `/onboarding/send-verify-email`,
-      {
-        previousMemberId
-      }
-    );
+  // 2-1 과거 계정 본인 인증 메일 발송
+  SEND_VERIFY_EMAIL: async (
+    previousMemberId: number
+  ): Promise<{ previousMemberId: number }> => {
+    const response = await apiClient.post(`/onboarding/send-verify-email`, {
+      previousMemberId
+    });
     return response.data;
   },
-  VERIFY_EMAIL: async (token: string): Promise<{ token: string }> => {
+  // 2-2 과거 계정 본인 인증
+  // token에서 code로 변경(문자열)
+  VERIFY_EMAIL: async (code: string): Promise<{ code: string }> => {
     const response = await apiClient.patch(`/onboarding/verify-email`, {
-      token: token
+      code: code.trim()
     });
     return response.data;
   }
