@@ -8,7 +8,7 @@ import {
   AuthServerRedirectNavigate,
   Dashboard,
   EmailVerification,
-  EmailVerificationServerRedirect,
+  // EmailVerificationServerRedirect,
   FAQ,
   JoinDiscord,
   PaymentsCheckout,
@@ -16,7 +16,8 @@ import {
   PaymentsSuccess,
   SignUp,
   StudentVerification,
-  StudentVerificationServerRedirect
+  UpdatedStudentVerification
+  // StudentVerificationServerRedirect
 } from '@/pages';
 import { DiscordConnect } from '@/pages/DiscordConnect';
 import { DiscordGuide } from '@/pages/DiscordGuide';
@@ -45,15 +46,14 @@ const router = sentryCreateBrowserRouter([
         path: RoutePath.AuthServerRedirect,
         element: <AuthServerRedirectNavigate />
       },
-
-      {
-        path: RoutePath.StudentVerificationServerRedirect,
-        element: <StudentVerificationServerRedirect />
-      },
-      {
-        path: RoutePath.EmailVerificationServerRedirect,
-        element: <EmailVerificationServerRedirect />
-      },
+      // {
+      //   path: RoutePath.StudentVerificationServerRedirect,
+      //   element: <StudentVerificationServerRedirect />
+      // },
+      // {
+      //   path: RoutePath.EmailVerificationServerRedirect,
+      //   element: <EmailVerificationServerRedirect />
+      // },
       {
         path: RoutePath.GithubSignin,
         children: [{ index: true, element: <Auth /> }]
@@ -68,6 +68,16 @@ const router = sentryCreateBrowserRouter([
               <VerificationGuard guardType="StudentVerification">
                 <Suspense fallback="..loading">
                   <StudentVerification />
+                </Suspense>
+              </VerificationGuard>
+            )
+          },
+          {
+            path: 'code',
+            element: (
+              <VerificationGuard guardType="StudentVerification">
+                <Suspense fallback="..loading">
+                  <UpdatedStudentVerification />
                 </Suspense>
               </VerificationGuard>
             )
