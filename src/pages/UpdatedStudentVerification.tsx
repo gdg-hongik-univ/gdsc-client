@@ -335,7 +335,9 @@ export default function UpdatedStudentVerification() {
             </ModalTextWrapper>
             <ModalButtonContainer>
               <ButtonWrapper>
-                <BackButton onClick={handleReturn}>돌아가기</BackButton>
+                <Button onClick={handleReturn} style={{ width: '100%' }}>
+                  돌아가기
+                </Button>
               </ButtonWrapper>
             </ModalButtonContainer>
           </ModalWrapper>
@@ -357,7 +359,9 @@ export default function UpdatedStudentVerification() {
           </MobileTopContent>
 
           <MobileBottomButtonWrapper>
-            <BackButton onClick={handleReturn}>돌아가기</BackButton>
+            <Button onClick={handleReturn} style={{ width: '100%' }}>
+              돌아가기
+            </Button>
           </MobileBottomButtonWrapper>
         </MobileSuccessView>
       )}
@@ -526,10 +530,4 @@ const MobileBottomButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-`;
-
-const BackButton = styled(Button)`
-  width: 100%;
-  background-color: ${color.primary};
-  color: white;
 `;
