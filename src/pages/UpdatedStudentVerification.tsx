@@ -279,6 +279,7 @@ export default function UpdatedStudentVerification() {
           <ButtonContainer>
             <ButtonWrapper>
               <Button
+                type="button"
                 variant="outline"
                 disabled={timeLeft > 0}
                 style={{
