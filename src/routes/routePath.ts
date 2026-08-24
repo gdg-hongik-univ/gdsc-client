@@ -22,8 +22,8 @@ const RoutePath = {
   AuthServerRedirect: '/social-login/redirect',
   // StudentVerificationServerRedirect: '/onboarding/verify-univ-email',
   // EmailVerificationServerRedirect: '/onboarding/verify-email',
-  GDSCHongikLink: 'https://www.gdghongik.com',
-  GDSCHongikDiscord: 'https://discord.gg/dSV6vSEuGU',
+  GDGHongikLink: 'https://www.gdghongik.com',
+  GDGHongikDiscord: 'https://discord.gg/dSV6vSEuGU',
   GitHubGuideLink: 'https://www.gdghongik.com/onboard-guide/github',
   StudentEmailLinkGuideLink:
     'https://www.gdghongik.com/onboard-guide/student-email',
