@@ -35,6 +35,7 @@ export default function UpdatedStudentVerification() {
   } = useStudentVerification();
 
   const [timeLeft, setTimeLeft] = useState<number>(60);
+  const [isRunning, setIsRunning] = useState<boolean>(true);
 
   useEffect(() => {
     if (prevEmail) {
@@ -43,15 +44,24 @@ export default function UpdatedStudentVerification() {
   }, [prevEmail, setValue]);
 
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    if (!isRunning) return;
+
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setIsRunning(false);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
+
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [isRunning]);
 
   useEffect(() => {
-    const IsStudentVerified = async () => {
+    const isStudentVerified = async () => {
       const univStatus = await onVerifyStudent();
       if (univStatus === 'UNSATISFIED') {
         setPending(true);
@@ -59,7 +69,7 @@ export default function UpdatedStudentVerification() {
         navigate(RoutePath.Dashboard);
       }
     };
-    IsStudentVerified();
+    isStudentVerified();
   }, [onVerifyStudent, navigate]);
 
   const handleResendCode = async () => {
@@ -69,6 +79,7 @@ export default function UpdatedStudentVerification() {
         await onResendEmail(prevEmail);
       }
       setTimeLeft(60);
+      setIsRunning(true);
     } catch {
       setError('verificationCode', {
         type: 'manual',
@@ -133,14 +144,15 @@ export default function UpdatedStudentVerification() {
   };
 
   return (
-    <Wrapper direction="column" justify="flex-start" align="flex-start">
+    <Wrapper direction="column" justify="space-between" align="flex-start">
       <Flex
         gap="xl"
         direction="column"
-        justify="space-between"
+        justify="flex-start"
         css={css`
           flex: 1;
           ${media.pc} {
+            flex: none;
             justify-content: center;
             max-width: 500px;
             gap: 60px;
@@ -162,12 +174,20 @@ export default function UpdatedStudentVerification() {
           </Text>
         </Flex>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            minHeight: '100%',
+            flex: 1
+          }}>
           <Flex
             direction="column"
             align="flex-start"
             css={css`
-              ${media.pc} {
+              width: 100% ${media.pc} {
                 align-items: center;
               }
             `}>
@@ -177,7 +197,7 @@ export default function UpdatedStudentVerification() {
               defaultValue={prevEmail}
               render={({ fieldState }) => (
                 <EmailContainer>
-                  <DisabledTextFieldWrapper>
+                  <TextFieldWrapper disabled>
                     <TextField
                       style={{ minWidth: '100%' }}
                       value={prevEmail}
@@ -185,7 +205,7 @@ export default function UpdatedStudentVerification() {
                       placeholder="이메일 주소를 입력하세요"
                       label="학교 이메일"
                     />
-                  </DisabledTextFieldWrapper>
+                  </TextFieldWrapper>
                   <Text
                     typo="body1"
                     style={{
@@ -258,13 +278,19 @@ export default function UpdatedStudentVerification() {
           </Flex>
           <ButtonContainer>
             <ButtonWrapper>
-              <OutlineButton
-                type="button"
+              <Button
+                variant="outline"
                 disabled={timeLeft > 0}
-                onClick={handleResendCode}
-                style={{ flex: 1 }}>
+                style={{
+                  flex: 1,
+                  borderColor:
+                    timeLeft === 0 ? color.primary : color.darkDisabled,
+                  color: timeLeft === 0 ? color.primary : color.darkDisabled
+                }}
+                onClick={handleResendCode}>
                 인증코드 다시 받기
-              </OutlineButton>
+              </Button>
+
               <Button
                 type="submit"
                 disabled={!isValid || isClicked}
@@ -308,15 +334,7 @@ export default function UpdatedStudentVerification() {
             </ModalTextWrapper>
             <ModalButtonContainer>
               <ButtonWrapper>
-                <Button
-                  style={{
-                    width: '100%',
-                    backgroundColor: color.primary,
-                    color: 'white'
-                  }}
-                  onClick={handleReturn}>
-                  돌아가기
-                </Button>
+                <BackButton onClick={handleReturn}>돌아가기</BackButton>
               </ButtonWrapper>
             </ModalButtonContainer>
           </ModalWrapper>
@@ -338,15 +356,7 @@ export default function UpdatedStudentVerification() {
           </MobileTopContent>
 
           <MobileBottomButtonWrapper>
-            <Button
-              style={{
-                width: '100%',
-                backgroundColor: color.primary,
-                color: 'white'
-              }}
-              onClick={handleReturn}>
-              돌아가기
-            </Button>
+            <BackButton onClick={handleReturn}>돌아가기</BackButton>
           </MobileBottomButtonWrapper>
         </MobileSuccessView>
       )}
@@ -390,6 +400,7 @@ const Wrapper = styled(Flex)`
   ${media.pc} {
     min-height: calc(100vh - var(--header-height, 0px));
     align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -401,17 +412,17 @@ const EmailContainer = styled.div`
   gap: ${space.xs};
 `;
 
-const TextFieldWrapper = styled.div`
+const TextFieldWrapper = styled.div<{ disabled?: boolean }>`
   flex: 1;
   height: 84.8px;
-`;
 
-const DisabledTextFieldWrapper = styled.div`
-  flex: 1;
-  height: 84.8px;
-  pointer-events: none;
-  user-select: none;
-  cursor: not-allowed;
+  ${({ disabled }) =>
+    disabled &&
+    `
+      pointer-events: none;
+      user-select: none;
+      cursor: not-allowed;
+    `}
 `;
 
 const ButtonContainer = styled.div`
@@ -419,9 +430,9 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: ${space.xs};
-  margin-top: ${space.xl};
+  margin-top: auto;
   ${media.pc} {
-    align-items: center;
+    margin-top: 60px;
   }
 `;
 
@@ -434,18 +445,6 @@ const ButtonWrapper = styled.div`
   gap: ${space.sm};
   ${media.pc} {
     max-width: 328px;
-  }
-`;
-
-const OutlineButton = styled(Button)`
-  background-color: ${color.white} !important;
-  border: 1px solid ${color.primary} !important;
-  color: ${color.primary} !important;
-
-  &:disabled {
-    background-color: ${color.white} !important;
-    border: 1px solid ${color.darkDisabled} !important;
-    color: ${color.darkDisabled} !important;
   }
 `;
 
@@ -466,10 +465,6 @@ const ModalButtonContainer = styled.div`
   width: 100%;
   gap: ${space.xs};
   margin-top: ${space.xl};
-  ${media.pc} {
-    align-items: center;
-    margin-top: 60px;
-  }
 `;
 
 const ModalWrapper = styled.div`
@@ -530,4 +525,10 @@ const MobileBottomButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+`;
+
+const BackButton = styled(Button)`
+  width: 100%;
+  background-color: ${color.primary};
+  color: white;
 `;
