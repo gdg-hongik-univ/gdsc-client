@@ -3,6 +3,7 @@ import useUnivEmail from '@/hooks/zustand/useUnivEmail';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useVerifyStudent } from '../query';
+import { useCallback } from 'react';
 
 export interface StudentVerificationFormValues {
   univEmail: string;
@@ -67,13 +68,13 @@ export default function useStudentVerification() {
   };
 
   // 회원 상태 조회
-  const onVerifyStudent = () => {
+  const onVerifyStudent = useCallback(() => {
     if (isError) {
       toast.error(error?.message);
       return undefined;
     }
     return result?.univStatus;
-  };
+  }, [isError, error, result?.univStatus]);
 
   const isPending = isQueryPending || isSending || isVerifying;
 
