@@ -12,7 +12,7 @@ import { color, space, typography } from 'wowds-tokens';
 import Button from 'wowds-ui/Button';
 import TextField from 'wowds-ui/TextField';
 
-/** 재학생 인증 페이지 */
+/* 재학생 인증 페이지 */
 export const StudentVerification = () => {
   const navigate = useNavigate();
   //TODO: 추후 pending 상태 백엔드 API 수정하면 반영해둘것.
@@ -47,7 +47,7 @@ export const StudentVerification = () => {
     setIsClicked(true);
     try {
       await onSubmitEmail();
-      const inputEmail = getValues ? getValues('univEmail') : 'testuser';
+      const inputEmail = getValues ? getValues('univEmail') : '';
       navigate(RoutePath.StudentVerificationCode, {
         state: { email: inputEmail }
       });
@@ -59,15 +59,16 @@ export const StudentVerification = () => {
   };
 
   return (
-    <Wrapper direction="column" justify="flex-start" align="flex-start">
+    <Wrapper direction="column" justify="space-between" align="flex-start">
       {isPending && <LoadingSpinner />}
       <Flex
         gap="xl"
         direction="column"
-        justify="space-between"
+        justify="flex-start"
         css={css`
           flex: 1;
           ${media.pc} {
+            flex: none;
             justify-content: center;
             max-width: 500px;
             gap: 60px;
@@ -89,12 +90,20 @@ export const StudentVerification = () => {
           </Text>
         </Flex>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            minHeight: '100%',
+            flex: 1
+          }}>
           <Flex
             direction="column"
             align="flex-start"
             css={css`
-              ${media.pc} {
+              width: 100% ${media.pc} {
                 align-items: center;
               }
             `}>
@@ -210,6 +219,7 @@ const Wrapper = styled(Flex)`
   ${media.pc} {
     min-height: calc(100vh - var(--header-height, 0px));
     align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -231,7 +241,8 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: ${space.xs};
-  margin-top: ${space.xl};
+  margin-top: auto;
+
   ${media.pc} {
     align-items: center;
     margin-top: 60px;
