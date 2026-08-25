@@ -34,7 +34,7 @@ export default function UpdatedStudentVerification() {
     setError
   } = useStudentVerification();
 
-  const [timeLeft, setTimeLeft] = useState<number>(60);
+  const [timeLeft, setTimeLeft] = useState<number>(58);
   const [isRunning, setIsRunning] = useState<boolean>(true);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function UpdatedStudentVerification() {
       if (onResendEmail) {
         await onResendEmail(prevEmail);
       }
-      setTimeLeft(60);
+      setTimeLeft(58);
       setIsRunning(true);
     } catch {
       setError('verificationCode', {
