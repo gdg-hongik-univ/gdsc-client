@@ -95,6 +95,8 @@ export const SignUp = () => {
     }
   }, [isPreviousMemberInfoLoading, previousMemberInfo, previousStudentId]);
 
+  // TODO : 2차 모집때 다시 풀어줄 예정
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setPreviousStudentId(studentId);
@@ -205,9 +207,9 @@ export const SignUp = () => {
                       isDuplicateError ? (
                         <HelperTextWrapper>
                           <span>{fieldState.error?.message}</span>
-                          <RegisterButton onClick={handleRegisterClick}>
+                          {/* <RegisterButton onClick={handleRegisterClick}>
                             새로 가입하기
-                          </RegisterButton>
+                          </RegisterButton> */}
                         </HelperTextWrapper>
                       ) : (
                         fieldState.error?.message
