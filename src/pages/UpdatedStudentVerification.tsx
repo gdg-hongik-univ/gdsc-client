@@ -15,6 +15,17 @@ import TextField from 'wowds-ui/TextField';
 import { Modal } from '../components/common/Modal';
 import { isAxiosError } from 'axios';
 
+const STORAGE_KEY = 'student_verify_expires_at';
+const DEFAULT_TIMEOUT_SECONDS = 60;
+
+const getRemainingSeconds = (): number => {
+  const savedExpiresAt = sessionStorage.getItem(STORAGE_KEY);
+  if (!savedExpiresAt) return 0;
+
+  const remaining = Math.ceil((Number(savedExpiresAt) - Date.now()) / 1000);
+  return remaining > 0 ? remaining : 0;
+};
+
 export default function UpdatedStudentVerification() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +45,16 @@ export default function UpdatedStudentVerification() {
     setError
   } = useStudentVerification();
 
-  const [timeLeft, setTimeLeft] = useState<number>(58);
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    const remaining = getRemainingSeconds();
+    if (remaining === 0 && !sessionStorage.getItem(STORAGE_KEY)) {
+      const expiresAt = Date.now() + DEFAULT_TIMEOUT_SECONDS * 1000;
+      sessionStorage.setItem(STORAGE_KEY, String(expiresAt));
+      return DEFAULT_TIMEOUT_SECONDS;
+    }
+    return remaining;
+  });
+
   const [isRunning, setIsRunning] = useState<boolean>(true);
 
   useEffect(() => {
@@ -47,14 +67,14 @@ export default function UpdatedStudentVerification() {
     if (!isRunning) return;
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          setIsRunning(false);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const remaining = getRemainingSeconds();
+      setTimeLeft(remaining);
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        setIsRunning(false);
+        sessionStorage.removeItem(STORAGE_KEY);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -78,7 +98,9 @@ export default function UpdatedStudentVerification() {
       if (onResendEmail) {
         await onResendEmail(prevEmail);
       }
-      setTimeLeft(58);
+      const newExpiresAt = Date.now() + DEFAULT_TIMEOUT_SECONDS * 1000;
+      sessionStorage.setItem(STORAGE_KEY, String(newExpiresAt));
+      setTimeLeft(DEFAULT_TIMEOUT_SECONDS);
       setIsRunning(true);
     } catch {
       setError('verificationCode', {
@@ -96,6 +118,7 @@ export default function UpdatedStudentVerification() {
     setIsClicked(true);
     try {
       await onSubmitCode();
+      sessionStorage.removeItem(STORAGE_KEY);
       setIsModalOpen(true);
     } catch (error) {
       if (isAxiosError(error) && error.response) {

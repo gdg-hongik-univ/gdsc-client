@@ -27,7 +27,7 @@ export const StudentVerification = () => {
     getValues
   } = useStudentVerification();
 
-  const IsStudentVerified = async () => {
+  const isStudentVerified = async () => {
     const univStatus = await onVerifyStudent();
     if (univStatus === 'UNSATISFIED') {
       setPending(true);
@@ -37,7 +37,7 @@ export const StudentVerification = () => {
   };
 
   useEffect(() => {
-    IsStudentVerified();
+    isStudentVerified();
   }, []);
 
   const handleSubmit = async (e?: React.FormEvent) => {
@@ -48,6 +48,10 @@ export const StudentVerification = () => {
     try {
       await onSubmitEmail();
       const inputEmail = getValues ? getValues('univEmail') : '';
+      const EXPIRE_SECONDS = 60;
+      const expiresAt = Date.now() + EXPIRE_SECONDS * 1000;
+      sessionStorage.setItem('student_verify_expires_at', String(expiresAt));
+
       navigate(RoutePath.StudentVerificationCode, {
         state: { email: inputEmail }
       });
