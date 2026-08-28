@@ -112,19 +112,19 @@ const Footer = () => {
             </Text>
             <Flex justify="flex-start" gap="xxs">
               <Link
-                to={'https://www.gdghongik.com/wowdevelopers/privacy-policy'}>
+                to={'https://docs.gdghongik.com/wowdevelopers/privacy-policy'}>
                 <Text typo="body3" color="black">
                   개인정보처리방침
                 </Text>
               </Link>
               <Text typo="body3">|</Text>
-              <Link to={'https://www.gdghongik.com/wowdevelopers/term-of-use'}>
+              <Link to={'https://docs.gdghongik.com/wowdevelopers/term-of-use'}>
                 <Text typo="body3" color="black">
                   이용약관
                 </Text>
               </Link>
               <Text typo="body3">|</Text>
-              <Link to={'https://www.gdghongik.com/wowdevelopers/refund'}>
+              <Link to={'https://docs.gdghongik.com/wowdevelopers/refund'}>
                 <Text typo="body3" color="black">
                   환불정책
                 </Text>

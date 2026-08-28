@@ -24,13 +24,14 @@ const RoutePath = {
   // EmailVerificationServerRedirect: '/onboarding/verify-email',
   GDGHongikLink: 'https://www.gdghongik.com',
   GDGHongikDiscord: 'https://discord.gg/dSV6vSEuGU',
-  GitHubGuideLink: 'https://www.gdghongik.com/onboard-guide/github',
+  GitHubGuideLink: 'https://docs.gdghongik.com/onboard-guide/github',
   StudentEmailLinkGuideLink:
-    'https://www.gdghongik.com/onboard-guide/student-email',
+    'https://docs.gdghongik.com/onboard-guide/student-email',
   CommunityGuideLink:
-    'https://www.gdghongik.com/onboard-guide/community-guideline',
-  TermsLink: 'https://www.gdghongik.com/onboard-guide/community-rule',
-  PersonalPrivacyLink: 'https://www.gdghongik.com/onboard-guide/privacy-policy',
+    'https://docs.gdghongik.com/onboard-guide/community-guideline',
+  TermsLink: 'https://docs.gdghongik.com/onboard-guide/community-rule',
+  PersonalPrivacyLink:
+    'https://docs.gdghongik.com/onboard-guide/privacy-policy',
 
   InstagramLink: 'https://www.instagram.com/gdg.hongikuniv/',
   DiscordRegisterLink: 'https://discord.com/register',

@@ -41,7 +41,7 @@ const MemberStatusInfoBox = forwardRef<
         <u
           onClick={() => {
             window.open(
-              'https://www.gdghongik.com/onboard-guide/member-status'
+              'https://docs.gdghongik.com/onboard-guide/member-status'
             );
           }}
           style={{ cursor: 'pointer' }}>
