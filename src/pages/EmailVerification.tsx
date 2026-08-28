@@ -4,7 +4,7 @@ import {
   MobileBreak,
   Text
 } from '@/components/common/Wrapper';
-import { useVerifyEmail, useVerifyStudentEmail } from '@/hooks/mutation';
+import { useVerifyEmail } from '@/hooks/mutation';
 import useSendVerifyEmail from '@/hooks/mutation/useSendVerifyEmail';
 import RoutePath from '@/routes/routePath';
 import { media } from '@/styles';

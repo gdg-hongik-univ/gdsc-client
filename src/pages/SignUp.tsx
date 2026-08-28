@@ -95,7 +95,6 @@ export const SignUp = () => {
     }
   }, [isPreviousMemberInfoLoading, previousMemberInfo, previousStudentId]);
 
-  // TODO : 2차 모집때 다시 풀어줄 예정
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setPreviousStudentId(studentId);
