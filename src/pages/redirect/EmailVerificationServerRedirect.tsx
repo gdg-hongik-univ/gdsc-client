@@ -6,7 +6,7 @@ import { css } from '@emotion/react';
 import { media } from '@/styles';
 import styled from '@emotion/styled';
 import { useLayoutEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { color } from 'wowds-tokens';
 import Button from 'wowds-ui/Button';
 
@@ -14,9 +14,17 @@ export const EmailVerificationServerRedirect = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
-  const { isSuccess, isPending, verifyEmail } = useVerifyEmail();
+  const {
+    isSuccess: isMutationSuccess,
+    isPending,
+    verifyEmail
+  } = useVerifyEmail();
   const [previousGithubHandle, setPreviousGithubHandle] = useState('');
   const [currentGithubHandle, setCurrentGithubHandle] = useState('');
+
+  const location = useLocation();
+  const isDirectVerified = location.state?.isDirectVerified ?? false;
+  const isSuccess = isDirectVerified || isMutationSuccess;
 
   useLayoutEffect(() => {
     if (token) verifyEmail(token);
@@ -78,7 +86,7 @@ export const EmailVerificationServerRedirect = () => {
             </TextContainer>
           </Flex>
           <Button onClick={handleButtonClick}>
-            {isSuccess ? '대시보드로 가기' : '돌아가기'}
+            {isSuccess ? '돌아가기' : '대시보드로 가기'}
           </Button>
         </Container>
       )}
