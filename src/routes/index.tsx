@@ -22,6 +22,8 @@ import {
 import { DiscordConnect } from '@/pages/DiscordConnect';
 import { DiscordGuide } from '@/pages/DiscordGuide';
 import NotFoundPage from '@/pages/NotFound';
+import { EmailVerificationServerRedirect } from '@/pages/redirect/EmailVerificationServerRedirect';
+import { StudentVerificationServerRedirect } from '@/pages/redirect/StudentVerificationServerRedirect';
 import RoutePath from '@/routes/routePath';
 import * as Sentry from '@sentry/react';
 import { Suspense } from 'react';
@@ -46,14 +48,14 @@ const router = sentryCreateBrowserRouter([
         path: RoutePath.AuthServerRedirect,
         element: <AuthServerRedirectNavigate />
       },
-      // {
-      //   path: RoutePath.StudentVerificationServerRedirect,
-      //   element: <StudentVerificationServerRedirect />
-      // },
-      // {
-      //   path: RoutePath.EmailVerificationServerRedirect,
-      //   element: <EmailVerificationServerRedirect />
-      // },
+      {
+        path: RoutePath.StudentVerificationServerRedirect,
+        element: <StudentVerificationServerRedirect />
+      },
+      {
+        path: RoutePath.EmailVerificationServerRedirect,
+        element: <EmailVerificationServerRedirect />
+      },
       {
         path: RoutePath.GithubSignin,
         children: [{ index: true, element: <Auth /> }]
