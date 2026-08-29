@@ -11,6 +11,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { color, space, typography } from 'wowds-tokens';
 import Button from 'wowds-ui/Button';
 import TextField from 'wowds-ui/TextField';
+import {
+  STUDENT_VERIFY_EXPIRE_SECONDS,
+  STUDENT_VERIFY_STORAGE_KEY
+} from '@/constants/auth';
 
 /* 재학생 인증 페이지 */
 export const StudentVerification = () => {
@@ -48,9 +52,8 @@ export const StudentVerification = () => {
     try {
       await onSubmitEmail();
       const inputEmail = getValues ? getValues('univEmail') : '';
-      const EXPIRE_SECONDS = 60;
-      const expiresAt = Date.now() + EXPIRE_SECONDS * 1000;
-      sessionStorage.setItem('student_verify_expires_at', String(expiresAt));
+      const expiresAt = Date.now() + STUDENT_VERIFY_EXPIRE_SECONDS * 1000;
+      sessionStorage.setItem(STUDENT_VERIFY_STORAGE_KEY, String(expiresAt));
 
       navigate(RoutePath.StudentVerificationCode, {
         state: { email: inputEmail }

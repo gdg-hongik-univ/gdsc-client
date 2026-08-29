@@ -14,12 +14,13 @@ import Button from 'wowds-ui/Button';
 import TextField from 'wowds-ui/TextField';
 import { Modal } from '../components/common/Modal';
 import { isAxiosError } from 'axios';
-
-const STORAGE_KEY = 'student_verify_expires_at';
-const DEFAULT_TIMEOUT_SECONDS = 60;
+import {
+  STUDENT_VERIFY_STORAGE_KEY,
+  STUDENT_VERIFY_EXPIRE_SECONDS
+} from '../constants/auth';
 
 const getRemainingSeconds = (): number => {
-  const savedExpiresAt = sessionStorage.getItem(STORAGE_KEY);
+  const savedExpiresAt = sessionStorage.getItem(STUDENT_VERIFY_STORAGE_KEY);
   if (!savedExpiresAt) return 0;
 
   const remaining = Math.ceil((Number(savedExpiresAt) - Date.now()) / 1000);
@@ -47,10 +48,13 @@ export default function UpdatedStudentVerification() {
 
   const [timeLeft, setTimeLeft] = useState<number>(() => {
     const remaining = getRemainingSeconds();
-    if (remaining === 0 && !sessionStorage.getItem(STORAGE_KEY)) {
-      const expiresAt = Date.now() + DEFAULT_TIMEOUT_SECONDS * 1000;
-      sessionStorage.setItem(STORAGE_KEY, String(expiresAt));
-      return DEFAULT_TIMEOUT_SECONDS;
+    if (
+      remaining === 0 &&
+      !sessionStorage.getItem(STUDENT_VERIFY_STORAGE_KEY)
+    ) {
+      const expiresAt = Date.now() + STUDENT_VERIFY_EXPIRE_SECONDS * 1000;
+      sessionStorage.setItem(STUDENT_VERIFY_STORAGE_KEY, String(expiresAt));
+      return STUDENT_VERIFY_EXPIRE_SECONDS;
     }
     return remaining;
   });
@@ -73,7 +77,6 @@ export default function UpdatedStudentVerification() {
       if (remaining <= 0) {
         clearInterval(timer);
         setIsRunning(false);
-        sessionStorage.removeItem(STORAGE_KEY);
       }
     }, 1000);
 
@@ -98,9 +101,9 @@ export default function UpdatedStudentVerification() {
       if (onResendEmail) {
         await onResendEmail(prevEmail);
       }
-      const newExpiresAt = Date.now() + DEFAULT_TIMEOUT_SECONDS * 1000;
-      sessionStorage.setItem(STORAGE_KEY, String(newExpiresAt));
-      setTimeLeft(DEFAULT_TIMEOUT_SECONDS);
+      const newExpiresAt = Date.now() + STUDENT_VERIFY_EXPIRE_SECONDS * 1000;
+      sessionStorage.setItem(STUDENT_VERIFY_STORAGE_KEY, String(newExpiresAt));
+      setTimeLeft(STUDENT_VERIFY_EXPIRE_SECONDS);
       setIsRunning(true);
     } catch {
       setError('verificationCode', {
@@ -118,7 +121,7 @@ export default function UpdatedStudentVerification() {
     setIsClicked(true);
     try {
       await onSubmitCode();
-      sessionStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem(STUDENT_VERIFY_STORAGE_KEY);
       setIsModalOpen(true);
     } catch (error) {
       if (isAxiosError(error) && error.response) {
