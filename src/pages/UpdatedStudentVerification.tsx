@@ -18,6 +18,7 @@ import {
   STUDENT_VERIFY_STORAGE_KEY,
   STUDENT_VERIFY_EXPIRE_SECONDS
 } from '../constants/auth';
+import { formatTime } from '@/utils/formatTime';
 
 const getRemainingSeconds = (): number => {
   const savedExpiresAt = sessionStorage.getItem(STUDENT_VERIFY_STORAGE_KEY);
@@ -331,7 +332,7 @@ export default function UpdatedStudentVerification() {
             </ButtonWrapper>
             {timeLeft > 0 ? (
               <Text typo="body2" color="error">
-                인증코드는 {timeLeft}초 후 다시 받을 수 있어요.
+                인증코드는 {formatTime(timeLeft)} 후 다시 받을 수 있어요.
               </Text>
             ) : (
               <Text typo="body2" color="error">
