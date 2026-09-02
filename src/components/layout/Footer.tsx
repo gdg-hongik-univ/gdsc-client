@@ -52,19 +52,20 @@ const Footer = () => {
                 와우디벨로퍼스
               </Text>
             </Link>
-            <Link to={'https://www.gdghongik.com/onboarding'}>
+            <Link to={'https://docs.gdghongik.com/onboarding'}>
               <Text typo="label2" style={{ textDecoration: 'underline' }}>
                 학회 소개
               </Text>
             </Link>
-            <Link to={'https://www.gdghongik.com/onboard-guide/community-rule'}>
+            <Link
+              to={'https://docs.gdghongik.com/onboard-guide/community-rule'}>
               <Text typo="label2" style={{ textDecoration: 'underline' }}>
                 GDG Hongik Univ. 회칙
               </Text>
             </Link>
             <Link
               to={
-                'https://www.gdghongik.com/onboard-guide/community-guideline'
+                'https://docs.gdghongik.com/onboard-guide/community-guideline'
               }>
               <Text typo="label2" style={{ textDecoration: 'underline' }}>
                 GDG Hongik Univ. 가이드라인
