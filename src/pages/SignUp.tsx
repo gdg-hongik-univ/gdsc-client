@@ -39,15 +39,12 @@ export type FormStateType = {
 
 type colorKey = keyof typeof colorType;
 
-/** 가입 신청서 페이지 */
 export const SignUp = () => {
   const { createInfo } = useCreateUserInfo();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // TODO: 깃허브 계정 변경 기능이 되면 돌려놓기
-  // const [previousStudentId, setPreviousStudentId] = useState('');
-  const [previousStudentId] = useState('');
+  const [previousStudentId, setPreviousStudentId] = useState('');
 
   useGetAccountInfo();
   const currentGithubHandle = useAccountInfoStore(
@@ -98,12 +95,10 @@ export const SignUp = () => {
     }
   }, [isPreviousMemberInfoLoading, previousMemberInfo, previousStudentId]);
 
-  // TODO : 2차 모집때 다시 풀어줄 예정
-  // const handleRegisterClick = (e: React.MouseEvent) => {
-  //   e.preventDefault();
-  //   setPreviousStudentId(studentId);
-  //   // 모달은 previousMemberInfo 로딩 완료 후 useEffect에서 열림
-  // };
+  const handleRegisterClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setPreviousStudentId(studentId);
+  };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -209,9 +204,9 @@ export const SignUp = () => {
                       isDuplicateError ? (
                         <HelperTextWrapper>
                           <span>{fieldState.error?.message}</span>
-                          {/* <RegisterButton onClick={handleRegisterClick}>
+                          <RegisterButton onClick={handleRegisterClick}>
                             새로 가입하기
-                          </RegisterButton> */}
+                          </RegisterButton>
                         </HelperTextWrapper>
                       ) : (
                         fieldState.error?.message
@@ -508,17 +503,17 @@ const HelperTextWrapper = styled.div`
 `;
 
 // 2차 모집때 다시 풀어줄 예정
-// const RegisterButton = styled.a`
-//   color: inherit;
-//   text-decoration: underline;
-//   cursor: pointer;
-//   &:hover {
-//     opacity: 0.8;
-//   }
-//   &:visited {
-//     color: inherit;
-//   }
-// `;
+const RegisterButton = styled.a`
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:visited {
+    color: inherit;
+  }
+`;
 
 const ModalTitle = styled(Text)`
   ${typography.body1}
