@@ -102,6 +102,7 @@ export const SignUp = () => {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setPreviousStudentId('');
   };
 
   const handleChangeAccount = () => {
