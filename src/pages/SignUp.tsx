@@ -205,7 +205,9 @@ export const SignUp = () => {
                       isDuplicateError ? (
                         <HelperTextWrapper>
                           <span>{fieldState.error?.message}</span>
-                          <RegisterButton onClick={handleRegisterClick}>
+                          <RegisterButton
+                            type="button"
+                            onClick={handleRegisterClick}>
                             새로 가입하기
                           </RegisterButton>
                         </HelperTextWrapper>
@@ -504,15 +506,19 @@ const HelperTextWrapper = styled.div`
 `;
 
 // 2차 모집때 다시 풀어줄 예정
-const RegisterButton = styled.a`
+const RegisterButton = styled.button`
   color: inherit;
+  font: inherit;
   text-decoration: underline;
   cursor: pointer;
+
   &:hover {
     opacity: 0.8;
   }
-  &:visited {
-    color: inherit;
+
+  &:focus-visible {
+    outline: 2px solid ${color.primary};
+    outline-offset: 3px;
   }
 `;
 
