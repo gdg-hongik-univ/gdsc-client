@@ -86,7 +86,7 @@ export const EmailVerificationServerRedirect = () => {
             </TextContainer>
           </Flex>
           <Button onClick={handleButtonClick}>
-            {isSuccess ? '돌아가기' : '대시보드로 가기'}
+            {isSuccess ? '대시보드로 가기' : '돌아가기'}
           </Button>
         </Container>
       )}
